@@ -3,8 +3,9 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const port = process.env.PORT || 3001;
 
-//TODO: var?
-users = new Map();
+//const ffi = require('ffi');
+
+var users = new Map();
 
 io.on('connection', function(socket){
   // For announcing the connection of new users by public key
