@@ -1,3 +1,4 @@
+
 [package]
 name = "crypto_module"
 version = "0.2.0"
@@ -7,7 +8,7 @@ authors = ["Colby Cypher Society"]
 crate-type = ["cdylib"]
 
 [dependencies]
-wasm-bindgen = "0.2.17"
+wasm-bindgen = "0.2.78"
 num = "0.2"
 num-traits = "0.2"
 rand = "0.5.5"

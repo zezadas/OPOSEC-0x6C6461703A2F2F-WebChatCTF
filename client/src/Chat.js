@@ -15,6 +15,7 @@ class Chat extends React.Component {
           message: '',
           encrypt: '',
           canSend: false,
+          nick: ''
         };
 
         this.send = this.send.bind(this);
@@ -24,6 +25,8 @@ class Chat extends React.Component {
         this.onChangeEncrypt = this.onChangeEncrypt.bind(this);
       }
 
+    
+
     async componentDidMount() {
         // Call the rust code from js
         const crypto = await js;
@@ -31,8 +34,9 @@ class Chat extends React.Component {
         const seedOne = this.generateSeed();
         const seedTwo = this.generateSeed();
         const keypair = crypto.Keypair.new(seedOne, seedTwo);
-
-        const socket = require('socket.io-client')('https://enigmatic-savannah-85282.herokuapp.com/');
+        const nickname= this.makeid(5); 
+        //const socket = require('socket.io-client')('https://enigmatic-savannah-85282.herokuapp.com/');
+        const socket = require('socket.io-client')('http://localhost:3001');
 
         // Stupid hack for accessing this in the socket events
         const obj = this;
@@ -40,7 +44,7 @@ class Chat extends React.Component {
         // Actions for when connecting to server
         socket.on('connect', function(){
             // For registering with the channel on connect
-            socket.emit('REGISTER', keypair.public_key_display_wasm());
+            socket.emit('REGISTER', keypair.public_key_display_wasm(),nickname);
 
             const temp = obj.state.messages;
 
@@ -63,7 +67,6 @@ class Chat extends React.Component {
                 const plaintext = data.split(":\n")[1].slice(1).trim();
                 try {
                     const decrypted = obj.state.keypair.decrypt(plaintext);
-                    alert("You've got mail!");
                     temp.push({
                         message: `${decrypted}`,
                         bgColor: '#558B2F',
@@ -104,12 +107,11 @@ class Chat extends React.Component {
         });
 
 
-        // For displaying new registration when new users connect
-        socket.on('NEW_REGISTRATION', function(data){
+        // For displaying new registrations when new users connect
+        socket.on('NEW_REGISTRATION', function(data, nick){
             const temp = obj.state.messages;
-
             temp.push({
-                message: `User joined`,
+                message: `User joined ${nick}`,
                 data: data,
                 bgColor: '#E0E0E0',
                 color: 'black',
@@ -119,7 +121,22 @@ class Chat extends React.Component {
                 messages: temp,
             });
         });
-
+        
+        // For displaying already registered users 
+        // TODO: colocar uma lista de users, fazer esta mensagem nao imprimir no chat
+        socket.on('ONLINE', function(data, nick){
+            const temp = obj.state.messages;
+            temp.push({
+                message: `User on the room ${nick}`,
+                data: data,
+                bgColor: '#E0E0E0',
+                color: 'black',
+            });
+            
+            obj.setState({
+                messages: temp,
+            });
+        });
         // For displaying when new users disconnect
         socket.on('DISCONNECTED', function(data){
             const temp = obj.state.messages;
@@ -137,6 +154,7 @@ class Chat extends React.Component {
 
         // Actions for when disconnecting from server
         socket.on('disconnect', function(){
+            //TODO: fix this error when disconnecting
             socket.emit('DISCONNECTED', this.state.keypair.public_key_display_wasm())
             const temp = obj.state.messages;
             
@@ -166,6 +184,17 @@ class Chat extends React.Component {
     scrollToBottom = () => {
         this.messagesEnd.scrollIntoView({ behavior: "smooth" });
     }
+    
+    makeid(length) {
+      var result           = '';
+      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+   }
+
 
     generateSeed() {
         let array = new Uint32Array(32);
@@ -180,8 +209,35 @@ class Chat extends React.Component {
         })
     }
 
+    parseCommand(message){
+        if (message.startsWith('/')){
+            var espacoIndex=message.indexOf(' ');
+            var commandStr = message.substring(1,espacoIndex);
+            switch (commandStr) {
+                case 'nick':
+                    this.nickname=this.state.message.substring(espacoIndex);
+                    //TODO encrypt nick
+                    const nickSigned = this.state.keypair.sign("bolota").slice(1).trim();
+                    const pubKey = this.state.keypair.public_key_display_wasm().trim();
+                    //TODO: remove from here to server const verified = this.state.crypto.verify(nickSigned,pubKey);
+                    this.state.socket.emit('NICK', this.nickname,nickSigned,pubKey);
+                    break;
+                default:
+                    break;
+            }
+            return "";
+        }
+        else{
+            this.state.socket.emit('MESSAGE', this.state.message);
+            return "";
+        }
+
+    
+    }
+
     send() {
-        this.state.socket.emit('MESSAGE', this.state.message);
+        var result = this.parseCommand(this.state.message);
+
         this.setState({
             message: '',
             canSend: false,
@@ -198,7 +254,6 @@ class Chat extends React.Component {
         try {
             const n = this.state.encrypt.trim();
             const encrypted = this.state.crypto.encrypt(this.state.message, n);
-            
             this.setState({
                 encrypt: '',
                 message: `[${this.state.encrypt}]:\n${encrypted}`,

@@ -81,6 +81,30 @@ impl Keypair {
 
         decrypted_values.iter().collect()
     }
+
+/// given a private key (e, n), signs message m for this private key using RSA.
+//#[wasm_bindgen]
+    pub fn sign(&self, cleartext: &str) -> String {
+        // receive n as hex and convert back to decimal
+        //let modulus = BigInt::parse_bytes(d.as_bytes(), 32).unwrap();
+
+        let modulus = string_to_number(&self.n);
+        let private_key = string_to_number(&self.d);
+
+        let mut encrypted_values = String::default();
+
+        for c in cleartext.bytes() {
+            let c_str = c.to_string();
+            let to_encrypt = string_to_number(&c_str);
+            let encrypted = to_encrypt.modpow(&private_key, &modulus);
+
+            encrypted_values = format!("{},{}", encrypted_values, number_to_string(&encrypted));
+        }
+
+        encrypted_values
+    }
+
+
 }
 
 #[cfg(test)]
@@ -135,6 +159,26 @@ pub fn encrypt(m: &str, n: &str) -> String {
 
     encrypted_values
 }
+
+#[wasm_bindgen]
+pub fn verify(m: &str, d: &str) -> String {
+    let modulus = BigInt::parse_bytes(d.as_bytes(), 32).unwrap();
+    let public_key = string_to_number("65537");
+
+    let mut decrypted_values: Vec<char> = Vec::new();
+
+    for c in m.split(',') {
+        let to_decrypt = string_to_number(&c.to_string());
+        let decrypted = to_decrypt.modpow(&public_key, &modulus);
+        let decrypted_u8 = decrypted.to_u8();
+        if let Some(d_u8) = decrypted_u8 {
+            decrypted_values.push(d_u8 as char)
+        }
+    }
+
+    decrypted_values.iter().collect()
+}
+
 
 #[cfg(test)]
 mod test_encrypt_decrypt {
