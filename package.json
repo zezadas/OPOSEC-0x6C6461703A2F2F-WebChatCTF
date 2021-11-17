@@ -9,7 +9,7 @@
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "socket.io": "^2.1.1",
-    "socket.io-client": "^2.1.1",
+    "socket.io-client": "^2.1.1"
   },
   "scripts": {
     "client": "webpack-dev-server --config ./webpack.config.js --mode development",
