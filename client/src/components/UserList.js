@@ -9,20 +9,32 @@ class UserList extends React.Component {
         this.state = {
             activeUsers: props.activeUsers,
         };
+        this.myRef= React.createRef();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.activeUsers != null &&
+            (
+                prevProps.activeUsers == null || 
+                prevProps.activeUsers.length !== this.props.activeUsers.length)
+            ) {
+                this.setState({ activeUsers: this.props.activeUsers })
+        }
     }
 
     render() {
-        return (
-            <div style={{ position: absolute, left: 0 }}>
-                <ul id="users">
-                    {this.state.activeUsers.map(user => {
-                        return (
-                            <li>{ user.nickname }</li>
-                        )
-                    })}
-                </ul>
-            </div>
-        );
+        var users = this.state.activeUsers;
+        var listElm = []
+        if (users) {
+            users.forEach((privateKey, nick) => {
+                listElm.push(<li>{nick}</li>)
+            })
+        }
+        return <ul>
+            {
+                listElm
+            }
+        </ul>;
     }
 }
 

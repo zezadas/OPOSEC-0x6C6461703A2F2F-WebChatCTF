@@ -30,7 +30,20 @@ io.on('connection', function(socket){
     socket.broadcast.emit("NEW_REGISTRATION", data, nick);
 
     updateUsers();
-    //TODO: mandar broadcast dos users que ja estao na sala
+
+    function replacer(key, value) {
+      if(value instanceof Map) {
+        return {
+          dataType: 'Map',
+          value: Array.from(value.entries()),
+        };
+      } else {
+        return value;
+      }
+    }
+
+    socket.broadcast.emit("LISTUSERS", JSON.stringify(users, replacer));
+
   });
 
 

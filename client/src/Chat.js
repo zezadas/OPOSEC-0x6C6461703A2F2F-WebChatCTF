@@ -4,6 +4,7 @@ import React from 'react';
 import 'babel-polyfill';
 import ChatBubble from './components/ChatBubble';
 import ChatInput from './components/ChatInput';
+import UserList from './components/UserList';
 
 const js = import("../../crypto_module");
 
@@ -123,20 +124,20 @@ class Chat extends React.Component {
         });
         
         // For displaying already registered users 
-        // TODO: colocar uma lista de users, fazer esta mensagem nao imprimir no chat
-        socket.on('LISTUSERS', function(data){
-            //const temp = obj.state.messages;
-/*            temp.push({
-                message: `User on the room ${nick}`,
-                data: data,
-                bgColor: '#E0E0E0',
-                color: 'black',
-            });
-            
+        socket.on('LISTUSERS', function(data) {
+            function reviver(key, value) {
+                if(typeof value === 'object' && value !== null) {
+                    if (value.dataType === 'Map') {
+                        return new Map(value.value);
+                    }
+                }
+                return value;
+            }
             obj.setState({
-                messages: temp,
-            });*/
+                users: JSON.parse(data, reviver),
+            });
         });
+
         // For displaying when new users disconnect
         socket.on('DISCONNECTED', function(data){
             const temp = obj.state.messages;
@@ -275,10 +276,11 @@ class Chat extends React.Component {
     render() {
         return (
             <div>
+                <UserList activeUsers={ this.state.users }/>
                 <ul id="messages">
-                    {this.state.messages.map(x => {
+                    {this.state.messages.map((x, key) => {
                         return (
-                            <ChatBubble bgColor={x.bgColor} color={x.color}>
+                            <ChatBubble bgColor={x.bgColor} color={x.color} key={key}>
                                 {x.message} {x.data != null && <a href="#" onClick={(e) => this.populate(e)}>{x.data}</a>} 
                             </ChatBubble>
                         )
