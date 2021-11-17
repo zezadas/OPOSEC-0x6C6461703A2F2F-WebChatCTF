@@ -124,9 +124,9 @@ class Chat extends React.Component {
         
         // For displaying already registered users 
         // TODO: colocar uma lista de users, fazer esta mensagem nao imprimir no chat
-        socket.on('ONLINE', function(data, nick){
-            const temp = obj.state.messages;
-            temp.push({
+        socket.on('LISTUSERS', function(data){
+            //const temp = obj.state.messages;
+/*            temp.push({
                 message: `User on the room ${nick}`,
                 data: data,
                 bgColor: '#E0E0E0',
@@ -135,7 +135,7 @@ class Chat extends React.Component {
             
             obj.setState({
                 messages: temp,
-            });
+            });*/
         });
         // For displaying when new users disconnect
         socket.on('DISCONNECTED', function(data){
