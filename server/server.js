@@ -12,6 +12,10 @@ var  api= ffi.Library(library_name, {
 
 var users = new Map();
 
+function map2json(mapzadas){
+ return JSON.stringify(mapzadas, replacer);
+}
+
 function replacer(key, value) {
   if(value instanceof Map) {
     return {
@@ -47,8 +51,6 @@ io.on('connection', function(socket){
 
     updateUsers();
 
-    socket.broadcast.emit("LISTUSERS", JSON.stringify(users, replacer));
-
   });
 
 
@@ -61,7 +63,7 @@ io.on('connection', function(socket){
   // For displaying and broadcasting all chat messages
   socket.on('LISTUSERS', function(data){
     console.log(users);
-    socket.emit('LISTUSERS', users);
+    updateUsers();
   });
 
   //update nick securely
@@ -73,9 +75,14 @@ io.on('connection', function(socket){
             //TODO: FLAG{MyCryptoBringsAllTheFlags2TheYard}
             return;
         }
+        var oldNick = socket.username; 
+        if (!users.has(nick)){
+            users.set(nick,users.get(oldNick));
+            users.delete(oldNick);
+            socket.username=nick;
+        }
         //TODO: set nickname. procurar nome antigo no mapa e alterar
         updateUsers();
-        socket.broadcast.emit('LISTUSERS', users);
     }
     else{
         return;//dont mess with me
@@ -87,32 +94,34 @@ io.on('connection', function(socket){
    // For displaying and broadcasting all when users disconnect
    socket.on('disconnect', function(data){
     console.log("User left:", data);
-    updateUsers();
-
-    socket.broadcast.emit("LISTUSERS", JSON.stringify(users, replacer));
+    updateUsers(1);
 
     io.emit('DISCONNECTED', data);
   });
 });
 
-function updateUsers(){
+function updateUsers(deleted=0){
+    if (deleted == 1){
     var tmpUsers = new Map();
     var clients = io.sockets.clients().connected;
 
     //    console.log(Object.keys(clients));
     //    console.log(clients);
     
-    for (const sockID of Object.keys(clients)){
-        var client = clients[sockID];
-        var username = client.username;
-        var pubkey = client.pubkey;
-        if (users.has(username) && client.connected){
-            tmpUsers.set(username,pubkey);
-        }
-        //clients[xxx].emit('MESSAGE',"da gracas por estares vivo");
+      for (const sockID of Object.keys(clients)){
+          var client = clients[sockID];
+          var username = client.username;
+          var pubkey = client.pubkey;
+          if (users.has(username) && client.connected){
+              tmpUsers.set(username,pubkey);
+          }
+          //clients[xxx].emit('MESSAGE',"da gracas por estares vivo");
+      }
+      //update global users list
+      users = tmpUsers;
     }
-    //update global users list
-    users = tmpUsers;
+    io.emit("LISTUSERS", map2json(users));
+
 }
 
 http.listen(port, function(){
