@@ -7,6 +7,17 @@ const port = process.env.PORT || 3001;
 
 var users = new Map();
 
+function replacer(key, value) {
+  if(value instanceof Map) {
+    return {
+      dataType: 'Map',
+      value: Array.from(value.entries()),
+    };
+  } else {
+    return value;
+  }
+}
+
 io.on('connection', function(socket){
   // For announcing the connection of new users by public key
   socket.on('REGISTER', function(data,nick){
@@ -30,17 +41,6 @@ io.on('connection', function(socket){
     socket.broadcast.emit("NEW_REGISTRATION", data, nick);
 
     updateUsers();
-
-    function replacer(key, value) {
-      if(value instanceof Map) {
-        return {
-          dataType: 'Map',
-          value: Array.from(value.entries()),
-        };
-      } else {
-        return value;
-      }
-    }
 
     socket.broadcast.emit("LISTUSERS", JSON.stringify(users, replacer));
 
@@ -75,7 +75,9 @@ io.on('connection', function(socket){
    socket.on('disconnect', function(data){
     console.log("User left:", data);
     updateUsers();
-    socket.broadcast.emit("LISTUSERS", users);
+
+    socket.broadcast.emit("LISTUSERS", JSON.stringify(users, replacer));
+
     io.emit('DISCONNECTED', data);
   });
 });

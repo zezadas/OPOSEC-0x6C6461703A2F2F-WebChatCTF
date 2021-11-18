@@ -276,40 +276,44 @@ class Chat extends React.Component {
     render() {
         return (
             <div>
-                <UserList activeUsers={ this.state.users }/>
-                <ul id="messages">
-                    {this.state.messages.map((x, key) => {
-                        return (
-                            <ChatBubble bgColor={x.bgColor} color={x.color} key={key}>
-                                {x.message} {x.data != null && <a href="#" onClick={(e) => this.populate(e)}>{x.data}</a>} 
-                            </ChatBubble>
-                        )
-                    })}
-                </ul>
-                <form action="">
-                    <ChatInput 
-                        onChange={this.onChangeMessage}
-                        value={this.state.message}
-                        onClick={this.send}
-                        placeholder={"Message: [type message to encrypt]"}
-                        buttonDisabled={this.state.canSend}
-                        inputDisabled={false}
-                    >
-                        Send
-                    </ChatInput>
-                    <ChatInput 
-                        onChange={this.onChangeEncrypt}
-                        value={this.state.encrypt}
-                        onClick={this.encrypt}
-                        placeholder={"Recipient: [click a user public key]"}
-                        buttonDisabled={this.state.encrypt.length > 0 && this.state.message.length > 0}
-                        inputDisabled={true}
-                    >
-                        Encrypt
-                    </ChatInput>
-                </form>
-                <div style={{ float:"left", clear: "both" }}
-                    ref={(el) => { this.messagesEnd = el; }}>
+                <div style={{ backgroundColor: "#d3e7e8", position: "absolute", width: "200px", height: "100%", top: 0, left: 0 }}>
+                    <UserList activeUsers={ this.state.users }/>
+                </div>
+                <div style={{ position: "absolute", width: "calc(100% - 200px)", height: "100%", top: 0, left: "200px" }}>
+                    <ul id="messages">
+                        {this.state.messages.map((x, key) => {
+                            return (
+                                <ChatBubble bgColor={x.bgColor} color={x.color} key={key}>
+                                    {x.message} {x.data != null && <a href="#" onClick={(e) => this.populate(e)}>{x.data}</a>} 
+                                </ChatBubble>
+                            )
+                        })}
+                    </ul>
+                    <form action="">
+                        <ChatInput 
+                            onChange={this.onChangeMessage}
+                            value={this.state.message}
+                            onClick={this.send}
+                            placeholder={"Message: [type message to encrypt]"}
+                            buttonDisabled={this.state.canSend}
+                            inputDisabled={false}
+                        >
+                            Send
+                        </ChatInput>
+                        <ChatInput 
+                            onChange={this.onChangeEncrypt}
+                            value={this.state.encrypt}
+                            onClick={this.encrypt}
+                            placeholder={"Recipient: [click a user public key]"}
+                            buttonDisabled={this.state.encrypt.length > 0 && this.state.message.length > 0}
+                            inputDisabled={true}
+                        >
+                            Encrypt
+                        </ChatInput>
+                    </form>
+                    <div style={{ float:"left", clear: "both" }}
+                        ref={(el) => { this.messagesEnd = el; }}>
+                    </div>
                 </div>
             </div>
         );

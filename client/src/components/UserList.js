@@ -27,10 +27,11 @@ class UserList extends React.Component {
         var listElm = []
         if (users) {
             users.forEach((privateKey, nick) => {
-                listElm.push(<li>{nick}</li>)
+                listElm.push(<li style={{ padding: "5px" }}>{nick}</li>)
             })
         }
-        return <ul>
+        return <ul style={{ marginLeft: "auto", marginRight: "auto", textAlign: "center" }}>
+            <p style={{ marginTop: "30px", fontWeight: "strong" }}>Active Users</p>
             {
                 listElm
             }
