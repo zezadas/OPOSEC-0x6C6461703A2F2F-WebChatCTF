@@ -40,6 +40,7 @@ Messages are filtered by each client. When a client receives a message with it's
 ```
 ~ rustup target add wasm32-unknown-unknown
 ~ rustup target add x86_64-unknown-linux-gnu
+```
 
 ## How to Use?
 
