@@ -16,8 +16,25 @@ Messages are filtered by each client. When a client receives a message with it's
 <div style="center"><img src="https://imgur.com/ldWBZpO.png"></div>
 
 ## Prerequisites
-* A recent version of node/npm (probably node 8+ should be fine)
-* Nightly Rust (we use the latest and greatest)
+* Make sure you're using version `8.0.0` of Node:
+* A simple way to manage your Node versions is to use [nvm](https://github.com/nvm-sh/nvm):
+
+```
+~ nvm install 8.0
+~ nvm use 8.0
+```
+
+* Install the latest version of [Nightly Rust](https://www.oreilly.com/library/view/rust-programming-by/9781788390637/e07dc768-de29-482e-804b-0274b4bef418.xhtml):
+
+```
+~ rustup default nightly
+```
+
+* Install the following cargo:
+
+```
+cargo install wasm-bindgen-cli --git https://github.com/rustwasm/wasm-bindgen --force
+```
 
 ## How to Use?
 
