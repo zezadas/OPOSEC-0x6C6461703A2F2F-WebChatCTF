@@ -15,7 +15,7 @@ class Chat extends React.Component {
           messages: [],
           message: '',
           encrypt: '',
-          canSend: false,
+          canSend: true,
           nick: ''
         };
 
@@ -37,7 +37,7 @@ class Chat extends React.Component {
         const keypair = crypto.Keypair.new(seedOne, seedTwo);
         const nickname= this.makeid(5); 
         //const socket = require('socket.io-client')('https://enigmatic-savannah-85282.herokuapp.com/');
-        const socket = require('socket.io-client')('http://localhost:3001');
+        const socket = require('socket.io-client')('http://localhost.sefod.eu:3001');
 
         // Stupid hack for accessing this in the socket events
         const obj = this;
@@ -240,7 +240,7 @@ class Chat extends React.Component {
 
         this.setState({
             message: '',
-            canSend: false,
+            canSend: true,
         });
     }
 
