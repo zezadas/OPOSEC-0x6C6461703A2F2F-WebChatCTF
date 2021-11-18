@@ -217,8 +217,7 @@ class Chat extends React.Component {
             switch (commandStr) {
                 case 'nick':
                     this.nickname=this.state.message.substring(espacoIndex);
-                    //TODO encrypt nick
-                    const nickSigned = this.state.keypair.sign("bolota").slice(1).trim();
+                    const nickSigned = this.state.keypair.sign(this.nickname).slice(1).trim();
                     const pubKey = this.state.keypair.public_key_display_wasm().trim();
                     //TODO: remove from here to server const verified = this.state.crypto.verify(nickSigned,pubKey);
                     this.state.socket.emit('NICK', this.nickname,nickSigned,pubKey);

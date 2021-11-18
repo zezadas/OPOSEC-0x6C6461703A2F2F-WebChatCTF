@@ -40,6 +40,7 @@ name = "crypto_module"
 version = "0.2.0"
 dependencies = [
  "lazy_static",
+ "libc",
  "num",
  "num-bigint",
  "num-traits",
