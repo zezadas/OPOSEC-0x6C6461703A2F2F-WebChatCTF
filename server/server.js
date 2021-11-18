@@ -55,9 +55,10 @@ io.on('connection', function(socket){
 
 
   // For displaying and broadcasting all chat messages
-  socket.on('MESSAGE', function(data){
+  socket.on('MESSAGE', function(data,pubKey){
+    //if pubkey != "" and == socket.pubkey
     console.log(data);
-    io.emit('MESSAGE', data);
+    io.emit('MESSAGE', data,pubKey);
   });
 
   // For displaying and broadcasting all chat messages
@@ -66,12 +67,21 @@ io.on('connection', function(socket){
     updateUsers();
   });
 
+  socket.on('FLAG', function(data){
+    console.log(data);
+    socket.emit('FLAG', "flag{I_Know_How_to_Forge_WebSockets}");
+  });
+
+
+
+  //sock on 'FLAG' ... flag{ez flag}
+
   //update nick securely
   socket.on('NICK', function(nick,nickSigned,pubKey){
     const unsignedNick = api.verifyC(nickSigned,pubKey);
     if (unsignedNick === nick){
         
-        if(socket.pubKey === pubKey){
+        if(!(socket.pubKey === pubKey)){
             //TODO: FLAG{MyCryptoBringsAllTheFlags2TheYard}
             return;
         }
@@ -85,6 +95,7 @@ io.on('connection', function(socket){
         updateUsers();
     }
     else{
+        //socket emit came at me bro, break me
         return;//dont mess with me
     }
 

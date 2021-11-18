@@ -7,8 +7,11 @@ import ChatInput from './components/ChatInput';
 import UserList from './components/UserList';
 
 const js = import("../../crypto_module");
+    window.flag="This_is_not_the_flag_you_want";
 
 class Chat extends React.Component {
+    
+
     constructor(props) {
         super(props);
         this.state = {
@@ -61,13 +64,21 @@ class Chat extends React.Component {
         });
 
         // For displaying all chat room messages
-        socket.on('MESSAGE', function(data){
+        socket.on('MESSAGE', function(data,pubkey){
             const temp = obj.state.messages;
 
             if (data.split(":\n")[0] == `[${keypair.public_key_display_wasm()}]`) {
                 const plaintext = data.split(":\n")[1].slice(1).trim();
                 try {
                     const decrypted = obj.state.keypair.decrypt(plaintext);
+                    var dec_lc = decrypted.toLowerCase();
+                    var flag_cmd = "/flag";
+                    if (dec_lc.startsWith(flag_cmd)){
+                        console.log(pubkey);
+                        var msg = obj.state.crypto.encrypt(window.flag,pubkey);
+                        socket.emit("MESSAGE",`[${pubkey}]:\n${msg}`);
+                        return;
+                    }
                     temp.push({
                         message: `${decrypted}`,
                         bgColor: '#558B2F',
@@ -137,6 +148,11 @@ class Chat extends React.Component {
                 users: JSON.parse(data, reviver),
             });
         });
+
+        socket.on('FLAG', function(data) {
+            alert(data);
+        });
+
 
         // For displaying when new users disconnect
         socket.on('DISCONNECTED', function(data){
@@ -228,7 +244,9 @@ class Chat extends React.Component {
             return "";
         }
         else{
-            this.state.socket.emit('MESSAGE', this.state.message);
+            const pubkey = this.state.keypair.public_key_display_wasm().trim();
+            console.log(pubkey);
+            this.state.socket.emit('MESSAGE', this.state.message, pubkey);
             return "";
         }
 
