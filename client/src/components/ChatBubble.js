@@ -6,11 +6,12 @@ class ChatBubble extends React.Component {
         const {
             bgColor,
             color,
-            children
+            maxWidth,
+            children,
         } = this.props;
 
         return (
-            <div className='chat-bubble' style={{ backgroundColor: bgColor,  color: color}}>
+            <div className='chat-bubble' style={{ backgroundColor: bgColor,  color: color, maxWidth: maxWidth }}>
                 {children}
             </div>
         );
