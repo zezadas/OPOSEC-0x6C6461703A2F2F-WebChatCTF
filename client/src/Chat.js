@@ -275,7 +275,7 @@ class Chat extends React.Component {
     render() {
         return (
             <div>
-                <div style={{ backgroundColor: "#d3e7e8", position: "absolute", width: "200px", height: "100%", top: 0, left: 0 }}>
+                <div style={{ position: "absolute", width: "200px", height: "100%", top: 0, left: "20px" }}>
                     <UserList activeUsers={ this.state.users }/>
                 </div>
                 <div style={{ position: "absolute", width: "calc(100% - 200px)", height: "100%", top: 0, left: "200px" }}>

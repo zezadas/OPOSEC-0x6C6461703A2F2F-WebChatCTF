@@ -25,13 +25,24 @@ class UserList extends React.Component {
     render() {
         var users = this.state.activeUsers;
         var listElm = []
+        var style = { 
+            backgroundColor: "white",
+            padding: "5px", 
+            marginBottom: '1px', 
+            borderBottom: "2px solid gray", 
+            borderTop: "2px solid gray" 
+        }
         if (users) {
             users.forEach((privateKey, nick) => {
-                listElm.push(<li key={nick} style={{ padding: "5px" }}>{nick}</li>)
+                listElm.push(<li key={nick} 
+                    style={style}>{nick}</li>)
             })
+        } else {
+            style.color = "gray";
+            listElm.push(<li key="random" style={style}>Fetching user list ...</li>)
         }
-        return <ul style={{ marginLeft: "auto", marginRight: "auto", textAlign: "center" }}>
-            <p style={{ marginTop: "30px", marginBottom: "30px", fontWeight: "bold" }}>Active Users</p>
+        return <ul style={{ listStyleType: "none", backgroundColor: "#d3e7e8", marginLeft: "auto", marginRight: "auto", textAlign: "center", boxShadow: "1px 2px 10px 2px" }}>
+            <p style={{ marginTop: "30px", marginBottom: "5px", fontWeight: "bold" }}>Active Users</p>
             {
                 listElm
             }
