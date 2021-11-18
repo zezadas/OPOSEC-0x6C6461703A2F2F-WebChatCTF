@@ -35,7 +35,7 @@ Messages are filtered by each client. When a client receives a message with it's
 ~ cargo install wasm-bindgen-cli --git https://github.com/rustwasm/wasm-bindgen --force
 ```
 
-* Add missing targets, e.g.:
+* Add missing targets:
 
 ```
 ~ rustup target add wasm32-unknown-unknown
