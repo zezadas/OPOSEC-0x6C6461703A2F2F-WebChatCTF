@@ -19,7 +19,8 @@ module.exports = {
   },
   devServer: {
     contentBase: './dist',
-    hot: true
+    hot: true,
+     disableHostCheck: true
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin()
