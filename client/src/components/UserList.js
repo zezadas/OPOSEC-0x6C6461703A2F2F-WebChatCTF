@@ -28,7 +28,6 @@ class UserList extends React.Component {
         var style = { 
             backgroundColor: "white",
             padding: "5px", 
-            marginBottom: '1px', 
             borderBottom: "2px solid gray", 
             borderTop: "2px solid gray" 
         }
