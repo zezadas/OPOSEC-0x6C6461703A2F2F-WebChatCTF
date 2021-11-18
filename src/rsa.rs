@@ -1,3 +1,12 @@
+//extern crate libc;
+//use libc::c_char;
+use std::os::raw::c_char;
+
+
+use std::ffi::CStr;
+use std::ffi::CString;
+//use std::str;
+
 use crypto_math::{generate_prime, lcm, mod_inverse, number_to_string, string_to_number};
 use num::bigint::BigInt;
 use num_traits::ToPrimitive;
@@ -159,6 +168,34 @@ pub fn encrypt(m: &str, n: &str) -> String {
 
     encrypted_values
 }
+
+#[no_mangle]
+pub extern "C" fn verifyC(arg1: *const i8, arg2: *const i8) ->  *const c_char {    
+    let s1 = unsafe { CStr::from_ptr(arg1) };
+    let s2 = unsafe { CStr::from_ptr(arg2) };
+	let m = s1.to_str().unwrap();
+    let d = s2.to_str().unwrap();
+   
+    let modulus = BigInt::parse_bytes(d.as_bytes(), 32).unwrap();
+    let public_key = string_to_number("65537");
+
+    let mut decrypted_values: Vec<char> = Vec::new();
+    for c in m.split(',') {
+        let to_decrypt = string_to_number(&c.to_string());
+        let decrypted = to_decrypt.modpow(&public_key, &modulus);
+        let decrypted_u8 = decrypted.to_u8();
+        if let Some(d_u8) = decrypted_u8 {
+            decrypted_values.push(d_u8 as char)
+        }
+    }
+    let x : String = decrypted_values.iter().collect::<String>();
+    
+    let s = CString::new(x).unwrap();
+    let p = s.as_ptr();
+    std::mem::forget(s);
+    p
+}
+
 
 #[wasm_bindgen]
 pub fn verify(m: &str, d: &str) -> String {

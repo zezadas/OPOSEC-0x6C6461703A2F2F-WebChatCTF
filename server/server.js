@@ -3,7 +3,12 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const port = process.env.PORT || 3001;
 
-//const ffi = require('ffi');
+const ffi = require('ffi');
+var library_name = 'target/x86_64-unknown-linux-gnu/debug/libcrypto_module.so';
+var  api= ffi.Library(library_name, {
+      'verifyC': ['string', ['string', 'string']]
+});
+
 
 var users = new Map();
 
@@ -61,13 +66,21 @@ io.on('connection', function(socket){
 
   //update nick securely
   socket.on('NICK', function(nick,nickSigned,pubKey){
-    //TODO: add a bug here where we accept any pub key, so any user can change the nick. FLAG{MyCryptoBringsAllTheFlags2TheYard}
-    //TODO: decrypt nickEnc and check if == nick
-    const verified = crypto.verify(nickSigned,pubKey);
-    console.log("aaaaaaaaaaaaa");
-    console.log(verified);
-    updateUsers();
-    socket.emit('LISTUSERS', users);
+    const unsignedNick = api.verifyC(nickSigned,pubKey);
+    if (unsignedNick === nick){
+        
+        if(socket.pubKey === pubKey){
+            //TODO: FLAG{MyCryptoBringsAllTheFlags2TheYard}
+            return;
+        }
+        //TODO: set nickname. procurar nome antigo no mapa e alterar
+        updateUsers();
+        socket.emit('LISTUSERS', users);
+    }
+    else{
+        return;//dont mess with me
+    }
+
   });
 
 

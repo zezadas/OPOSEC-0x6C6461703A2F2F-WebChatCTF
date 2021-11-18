@@ -5,6 +5,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3",
+    "ffi": "^2.3.0",
+    "libc": "^1.0.0-b0",
     "nan": "^2.15.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
@@ -15,8 +17,8 @@
   "scripts": {
     "client": "webpack-dev-server --config ./webpack.config.js --mode development",
     "server": "node server/server.js",
-    "build-debug": "cargo +nightly build --target wasm32-unknown-unknown && wasm-bindgen target/wasm32-unknown-unknown/debug/crypto_module.wasm --out-dir .",
-    "build-release": "cargo +nightly build --release --target wasm32-unknown-unknown && wasm-bindgen target/wasm32-unknown-unknown/release/crypto_module.wasm --out-dir ."
+    "build-debug": "cargo +nightly build --target wasm32-unknown-unknown --target x86_64-unknown-linux-gnu -Zmultitarget && wasm-bindgen target/wasm32-unknown-unknown/debug/crypto_module.wasm --out-dir .",
+    "build-release": "cargo +nightly build --target wasm32-unknown-unknown --target x86_64-unknown-linux-gnu -Zmultitarget && wasm-bindgen target/wasm32-unknown-unknown/release/crypto_module.wasm --out-dir ."
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

@@ -14,3 +14,4 @@ num-traits = "0.2"
 rand = "0.5.5"
 num-bigint = { version = "0.2.0", features = ["rand"] }
 lazy_static = "1.1.0"
+libc = "*"
