@@ -41,7 +41,7 @@ class UserList extends React.Component {
             listElm.push(<li key="random" style={style}>Fetching user list ...</li>)
         }
         return <ul style={{ listStyleType: "none", backgroundColor: "#d3e7e8", marginLeft: "auto", marginRight: "auto", textAlign: "center", boxShadow: "1px 2px 10px 2px" }}>
-            <p style={{ marginTop: "30px", marginBottom: "5px", fontWeight: "bold" }}>Active Users</p>
+            <p style={{ marginTop: "20px", marginBottom: "5px", fontWeight: "bold" }}>Active Users</p>
             {
                 listElm
             }
