@@ -128,8 +128,15 @@ class Chat extends React.Component {
                 bgColor: '#E0E0E0',
                 color: 'black',
             });
+
+            var tmpUsers = this.state.users;
+            if (this.state.users.get(nick) == null || this.state.users.get(nick) == undefined) {                
+                tmpUsers.set(nick, data);
+                this.setState({ users: tmpUsers });
+            }
             
             obj.setState({
+                users: tmpUsers,
                 messages: temp,
             });
         });
@@ -296,7 +303,9 @@ class Chat extends React.Component {
     render() {
         return (
             <div>
-                <UserList activeUsers={ this.state.users } fillOutRecipientKeyInput={this.fillOutRecipientKeyInput}/>
+                <UserList activeUsers={ this.state.users } 
+                    currentUser={ this.state.currentUser }
+                    fillOutRecipientKeyInput={this.fillOutRecipientKeyInput}/>
                 <ul id="messages">
                     {this.state.messages.map((x, key) => {
                         return (

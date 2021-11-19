@@ -7,6 +7,7 @@ class UserList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            currentUser: props.currentUser,
             activeUsers: props.activeUsers,
         };
     }
@@ -19,6 +20,10 @@ class UserList extends React.Component {
             ) {
                 this.setState({ activeUsers: this.props.activeUsers })
         }
+        if (this.props.currentUser != prevProps.currentUser) {
+            this.setState({ currentUser: this.props.currentUser })
+        }
+        
     }
 
     render() {
