@@ -1,0 +1,7 @@
+apt-get install -y chromium-browser
+
+npm i --save puppeteer
+nvm install lts/gallium
+nvm use lts/gallium
+
+npm --prefix /ctf/node_modules/puppeteer/ install

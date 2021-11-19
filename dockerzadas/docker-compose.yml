@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  serverzadas:
+    command: npm run server
+    build: ./build
+    ports:
+      - "6601:3001"
+  clientzadas:
+    command: npm run client
+    build: ./build
+    ports:
+      - "6680:8080"
+
+
+
