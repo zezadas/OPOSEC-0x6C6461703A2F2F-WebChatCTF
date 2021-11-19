@@ -129,15 +129,7 @@ class Chat extends React.Component {
                 color: 'black',
             });
 
-            var tmpUsers = obj.state.users;
-            if (obj.state.users != null && obj.state.user != undefined &&
-                (obj.state.users.get(nick) == null || obj.state.users.get(nick) == undefined)) {                
-                tmpUsers.set(nick, data);
-                this.setState({ users: tmpUsers });
-            }
-            
             obj.setState({
-                users: tmpUsers,
                 messages: temp,
             });
         });
