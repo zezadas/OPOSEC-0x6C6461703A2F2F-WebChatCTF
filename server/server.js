@@ -3,11 +3,11 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const port = process.env.PORT || 3001;
 
-//const ffi = require('ffi');
+const ffi = require('ffi');
 var library_name = 'target/x86_64-unknown-linux-gnu/debug/libcrypto_module.so';
-//var  api= ffi.Library(library_name, {
-//      'verifyC': ['string', ['string', 'string']]
-//});
+var  api= ffi.Library(library_name, {
+      'verifyC': ['string', ['string', 'string']]
+});
 
 
 var users = new Map();

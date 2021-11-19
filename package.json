@@ -5,6 +5,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3",
+    "ffi": "^2.3.0",
     "libc": "^1.0.0-b0",
     "nan": "^2.15.0",
     "prop-types": "^15.6.2",
