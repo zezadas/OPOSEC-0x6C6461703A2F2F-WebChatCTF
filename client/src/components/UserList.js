@@ -9,7 +9,6 @@ class UserList extends React.Component {
         this.state = {
             activeUsers: props.activeUsers,
         };
-        this.myRef= React.createRef();
     }
 
     componentDidUpdate(prevProps) {
@@ -33,12 +32,18 @@ class UserList extends React.Component {
         }
         if (users) {
             users.forEach((privateKey, nick) => {
-                listElm.push(<li key={nick} 
-                    style={style}>{nick}</li>)
+                listElm.push(
+                    <li key={nick} style={style}>
+                        <button style={{ backgroundColor: "transparent", border: "none", textDecoration: "underline", cursor: "pointer" }} 
+                            onClick={ () => this.props.fillOutRecipientKeyInput(privateKey) }>
+                            {nick}
+                        </button>
+                    </li>
+                )
             })
         } else {
             style.color = "gray";
-            listElm.push(<li key="random" style={style}>Fetching user list ...</li>)
+            listElm.push(<li key="random" style={style}></li>)
         }
         return <ul style={{ 
             position: "absolute", 

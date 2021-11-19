@@ -27,6 +27,7 @@ class Chat extends React.Component {
         this.populate = this.populate.bind(this);
         this.onChangeMessage = this.onChangeMessage.bind(this);
         this.onChangeEncrypt = this.onChangeEncrypt.bind(this);
+        this.fillOutRecipientKeyInput = this.fillOutRecipientKeyInput.bind(this);
       }
 
     
@@ -290,10 +291,14 @@ class Chat extends React.Component {
         })
     }
 
+    fillOutRecipientKeyInput(privateKey) {
+        this.setState({ encrypt: privateKey })
+    }
+
     render() {
         return (
             <div>
-                <UserList activeUsers={ this.state.users }/>
+                <UserList activeUsers={ this.state.users } fillOutRecipientKeyInput={this.fillOutRecipientKeyInput}/>
                 <ul id="messages">
                     {this.state.messages.map((x, key) => {
                         return (
