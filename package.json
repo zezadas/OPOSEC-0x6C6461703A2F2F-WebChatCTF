@@ -9,6 +9,7 @@
     "libc": "^1.0.0-b0",
     "nan": "^2.15.0",
     "prop-types": "^15.6.2",
+    "puppeteer": "^11.0.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "socket.io": "^2.1.1",
