@@ -92,7 +92,7 @@ io.on('connection', function(socket){
             socket.username=nick;
         }
         //TODO: set nickname. procurar nome antigo no mapa e alterar
-        updateUsers();
+        updateUsers(1);
     }
     else{
         //socket emit came at me bro, break me
