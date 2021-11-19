@@ -255,10 +255,6 @@ class Chat extends React.Component {
     }
 
     send() {
-        this.setState({
-            message: e.target.value,
-        });
-
         var result = this.parseCommand(this.state.message);
 
         this.setState({
