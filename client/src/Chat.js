@@ -305,6 +305,8 @@ class Chat extends React.Component {
                 </ul>
                 <form action="">
                     <ChatInput 
+                        inputIdValue="message-input-box"
+                        buttonIdValue="send-button"
                         onChange={this.onChangeMessage}
                         value={this.state.message}
                         onClick={this.send}
@@ -315,6 +317,8 @@ class Chat extends React.Component {
                         Send
                     </ChatInput>
                     <ChatInput 
+                        inputIdValue="recipient-input-box"
+                        buttonIdValue="encrypt-button"
                         onChange={this.onChangeEncrypt}
                         value={this.state.encrypt}
                         onClick={this.encrypt}

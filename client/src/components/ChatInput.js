@@ -5,6 +5,7 @@ class ChatInput extends React.Component {
         return (
             <div className="inputbox">
                 <input 
+                    id={this.props.inputIdValue}
                     autoComplete="off" 
                     onChange={this.props.onChange} 
                     value={this.props.value}
@@ -13,6 +14,7 @@ class ChatInput extends React.Component {
                     disabled={this.props.inputDisabled}
                 />
                 <button 
+                    id={this.props.buttonIdValue}
                     onClick={this.props.onClick} 
                     type="button"
                     style={{
