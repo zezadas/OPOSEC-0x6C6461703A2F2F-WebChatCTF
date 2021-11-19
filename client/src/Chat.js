@@ -130,7 +130,8 @@ class Chat extends React.Component {
             });
 
             var tmpUsers = obj.state.users;
-            if (obj.state.users.get(nick) == null || obj.state.users.get(nick) == undefined) {                
+            if (obj.state.users != null && obj.state.user != undefined &&
+                (obj.state.users.get(nick) == null || obj.state.users.get(nick) == undefined)) {                
                 tmpUsers.set(nick, data);
                 this.setState({ users: tmpUsers });
             }
