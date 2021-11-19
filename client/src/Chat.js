@@ -10,7 +10,6 @@ const js = import("../../crypto_module");
     window.flag="This_is_not_the_flag_you_want";
 
 class Chat extends React.Component {
-    
 
     constructor(props) {
         super(props);
@@ -250,13 +249,11 @@ class Chat extends React.Component {
             this.state.socket.emit('MESSAGE', this.state.message, pubkey);
             return "";
         }
-
-    
     }
 
-    send() {
+    send(event) {
+        event.preventDefault();
         var result = this.parseCommand(this.state.message);
-
         this.setState({
             message: '',
             canSend: true,
@@ -269,7 +266,8 @@ class Chat extends React.Component {
         })
     }
 
-    encrypt() {
+    encrypt(event) {
+        event.preventDefault();
         try {
             const n = this.state.encrypt.trim();
             const encrypted = this.state.crypto.encrypt(this.state.message, n);
@@ -308,7 +306,7 @@ class Chat extends React.Component {
                         )
                     })}
                 </ul>
-                <form action="">
+                <div className="div-wrapper">
                     <ChatInput 
                         inputIdValue="message-input-box"
                         buttonIdValue="send-button"
@@ -317,8 +315,7 @@ class Chat extends React.Component {
                         onClick={this.send}
                         placeholder={"Message: [type message to encrypt]"}
                         buttonDisabled={this.state.canSend}
-                        inputDisabled={false}
-                    >
+                        inputDisabled={false}>
                         Send
                     </ChatInput>
                     <ChatInput 
@@ -329,11 +326,10 @@ class Chat extends React.Component {
                         onClick={this.encrypt}
                         placeholder={"Recipient: [click a user public key]"}
                         buttonDisabled={this.state.encrypt.length > 0 && this.state.message.length > 0}
-                        inputDisabled={true}
-                    >
+                        inputDisabled={true}>
                         Encrypt
                     </ChatInput>
-                </form>
+                </div>
                 <div style={{ float:"left", clear: "both" }}
                     ref={(el) => { this.messagesEnd = el; }}>
                 </div>

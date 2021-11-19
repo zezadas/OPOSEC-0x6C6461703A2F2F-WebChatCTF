@@ -8,14 +8,14 @@ body {
     font: 15px Helvetica, Arial;
 }
 
-form { 
+.div-wrapper { 
     padding: 10px; position: fixed;
     background-color: #eee;
     bottom: 0; 
     width: 100%; 
 }
 
-form input { 
+.div-wrapper input { 
     border: 1px solid darkgray;
     background-color: white;
     border-radius: 3px;
@@ -25,7 +25,7 @@ form input {
     font: 12px Helvetica, Arial;
 }
 
-form button {
+.div-wrapper button {
     width: 9%; 
     background: #82B1FF;
     border-radius: 3px;
@@ -70,11 +70,11 @@ form button {
         display: inline-block;
     }
 
-    form input {
+    .div-wrapper input {
         width: 65%;
     }
 
-    form button {
+    .div-wrapper button {
         width: 31%;
     }
 } 
@@ -86,11 +86,11 @@ form button {
         display: inline-block;
     }
 
-    form input {
+    .div-wrapper input {
         width: 65%;
     }
 
-    form button {
+    .div-wrapper button {
         width: 31%;
     }
 }
@@ -102,11 +102,11 @@ form button {
         display: inline-block;
     }
 
-    form input {
+    .div-wrapper input {
         width: 65%;
     }
 
-    form button {
+    .div-wrapper button {
         width: 31%;
     }
 }
@@ -118,11 +118,11 @@ form button {
         display: inline-block;
     }
 
-    form input {
+    .div-wrapper input {
         width: 65%;
     }
 
-    form button {
+    .div-wrapper button {
         width: 31%;
     }
 }
