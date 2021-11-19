@@ -81,7 +81,7 @@ io.on('connection', function(socket){
     const unsignedNick = api.verifyC(nickSigned,pubKey);
     if (unsignedNick === nick){
         
-        if(!(socket.pubKey === pubKey)){
+        if(!(socket.pubkey === pubKey)){
             //TODO: FLAG{MyCryptoBringsAllTheFlags2TheYard}
             return;
         }
