@@ -40,7 +40,7 @@ class Chat extends React.Component {
         const keypair = crypto.Keypair.new(seedOne, seedTwo);
         const nickname= this.makeid(5); 
         const socket = require('socket.io-client')('https://enigmatic-savannah-85282.herokuapp.com/');
-        //const socket = require('socket.io-client')('xmas2021.sefod.eu');
+        const socket = require('socket.io-client')('xmas2021.sefod.eu');
 
         // Stupid hack for accessing this in the socket events
         const obj = this;
