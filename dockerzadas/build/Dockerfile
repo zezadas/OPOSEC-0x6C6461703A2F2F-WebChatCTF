@@ -1,6 +1,8 @@
 #git clone the repo to this same folder. it will be used on the copy process
 
 FROM ubuntu:18.04
+EXPOSE 8080
+EXPOSE 3001
 #why not alpine. Alpine sucks as always and does not use libc.
 WORKDIR /ctf
 
@@ -19,7 +21,8 @@ RUN apt-get update && apt-get install -y -q --no-install-recommends \
         git \
         libssl-dev \
         wget \
-        pkg-config
+        pkg-config \
+        chromium-browser
 RUN apt-get install -y nodejs-dev node-gyp libssl1.0-dev
 RUN apt-get install -y npm
 RUN rm -rf /var/lib/apt/lists/*
