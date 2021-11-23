@@ -12,11 +12,11 @@ function delay(time) {
     await page.goto('https://xmas2021.sefod.eu/');
     await delay(10000);
     await page.evaluate(_ => {
-    window.flag="flag{ThisOneWasEasy}";
+    window.flag="flag{This_Flag_Is_Easier_Than_Rabanadas}";
     var texto = document.getElementById("message-input-box");
     var botao = document.getElementById("send-button");
     var setValue = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
-    setValue.call(texto, '/nick botzadas');
+    setValue.call(texto, '/nick Santa');
 
     var e = new Event('change', { bubbles: true });
         texto.dispatchEvent(e);

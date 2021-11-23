@@ -69,7 +69,7 @@ io.on('connection', function(socket){
 
   socket.on('FLAG', function(data){
     console.log(data);
-    socket.emit('FLAG', "flag{I_Know_How_to_Forge_WebSockets}");
+    socket.emit('FLAG', "flag{BoloRei_And_WebSockets_4_Xmas}");
   });
 
 
