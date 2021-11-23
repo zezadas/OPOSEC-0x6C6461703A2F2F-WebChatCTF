@@ -4,17 +4,17 @@ services:
     command: npm run server
     build: ./build
     volumes:
-      - ./WebApp/client:/ctf/client
-      - ./WebApp/server:/ctf/server
-      - ./WebApp/dist:/ctf/dist
+      - ./build/ChatDemo/client:/ctf/client
+      - ./build/ChatDemo/server:/ctf/server
+      - ./build/ChatDemo/dist:/ctf/dist
     ports:
       - "6601:3001"
   clientzadas:
     command: npm run client
     volumes:
-      - ./WebApp/client:/ctf/client
-      - ./WebApp/server:/ctf/server
-      - ./WebApp/dist:/ctf/dist
+      - ./build/ChatDemo/client:/ctf/client
+      - ./build/ChatDemo/server:/ctf/server
+      - ./build/ChatDemo/dist:/ctf/dist
     build: ./build
     ports:
       - "6680:8080"
