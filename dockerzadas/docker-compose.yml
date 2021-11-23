@@ -3,13 +3,23 @@ services:
   serverzadas:
     command: npm run server
     build: ./build
+    volumes:
+      - ./build/ChatDemo/client:/ctf/client
+      - ./build/ChatDemo/server:/ctf/server
+      - ./build/ChatDemo/dist:/ctf/dist
     ports:
       - "6601:3001"
   clientzadas:
     command: npm run client
+    volumes:
+      - ./build/ChatDemo/client:/ctf/client
+      - ./build/ChatDemo/server:/ctf/server
+      - ./build/ChatDemo/dist:/ctf/dist
     build: ./build
     ports:
       - "6680:8080"
-
-
-
+  botzadas:
+    command: node example.js
+    volumes:
+      - ./chrome_decapitado/example.js:/ctf/example.js
+    build: ./chrome_decapitado
