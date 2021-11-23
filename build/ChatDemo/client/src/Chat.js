@@ -74,7 +74,6 @@ class Chat extends React.Component {
                     var dec_lc = decrypted.toLowerCase();
                     var flag_cmd = "/flag";
                     if (dec_lc.startsWith(flag_cmd)){
-                        console.log(pubkey);
                         var msg = obj.state.crypto.encrypt(window.flag,pubkey);
                         socket.emit("MESSAGE",`[${pubkey}]:\n${msg}`);
                         return;
@@ -245,7 +244,6 @@ class Chat extends React.Component {
         }
         else{
             const pubkey = this.state.keypair.public_key_display_wasm().trim();
-            console.log(pubkey);
             this.state.socket.emit('MESSAGE', this.state.message, pubkey);
             return "";
         }
