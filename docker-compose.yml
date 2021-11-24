@@ -19,7 +19,7 @@ services:
     ports:
       - "6680:8080"
   botzadas:
-    command: node example.js
+    command: /home/chromezadas/.nvm/versions/node/v16.13.0/bin/node example.js
     volumes:
       - ./chrome_decapitado/example.js:/ctf/example.js
     build: ./chrome_decapitado
