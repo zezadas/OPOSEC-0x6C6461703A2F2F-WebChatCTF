@@ -7,7 +7,7 @@ import ChatInput from './components/ChatInput';
 import UserList from './components/UserList';
 
 const js = import("../../crypto_module");
-    window.flag="This_is_not_the_flag_you_want";
+window.flag="This_is_not_the_flag_you_want";
 
 class Chat extends React.Component {
 
@@ -39,8 +39,12 @@ class Chat extends React.Component {
         const seedTwo = this.generateSeed();
         const keypair = crypto.Keypair.new(seedOne, seedTwo);
         const nickname= this.makeid(5); 
-        //const socket = require('socket.io-client')('https://enigmatic-savannah-85282.herokuapp.com/');
-        const socket = require('socket.io-client')('xmas2021.sefod.eu');
+        if (process.env.SOCKETURL === ""){
+            const socket = require('socket.io-client')('xmas2021.sefod.eu');
+        }
+        else{
+            const socket = require('socket.io-client')('localhost:3001');
+        }
 
         // Stupid hack for accessing this in the socket events
         const obj = this;
@@ -76,6 +80,7 @@ class Chat extends React.Component {
                     if (dec_lc.startsWith(flag_cmd)){
                         var msg = obj.state.crypto.encrypt(window.flag,pubkey);
                         socket.emit("MESSAGE",`[${pubkey}]:\n${msg}`);
+                        console.log(window.flag);
                         return;
                     }
                     temp.push({

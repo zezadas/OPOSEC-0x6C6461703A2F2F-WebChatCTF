@@ -70,6 +70,7 @@ io.on('connection', function(socket){
   socket.on('FLAG', function(data){
     console.log(data);
     socket.emit('FLAG', "flag{BoloRei_And_WebSockets_4_Xmas}");
+    console.log("flag{BoloRei_And_WebSockets_4_Xmas}");
   });
 
 
