@@ -9,6 +9,9 @@ services:
       - ./build/ChatDemo/dist:/ctf/dist
     ports:
       - "6601:3001"
+      - "3001:3001"
+    networks:
+      - redezadas
   clientzadas:
     command: npm run client
     volumes:
@@ -18,8 +21,16 @@ services:
     build: ./build
     ports:
       - "6680:8080"
+    networks:
+      - redezadas
   botzadas:
     command: /home/chromezadas/.nvm/versions/node/v16.13.0/bin/node example.js
     volumes:
-      - ./chrome_decapitado/example.js:/ctf/example.js
+      - ./chrome_decapitado:/ctf
     build: ./chrome_decapitado
+    networks:
+      - redezadas
+
+networks:
+  redezadas:
+    name: custom_netzadas
