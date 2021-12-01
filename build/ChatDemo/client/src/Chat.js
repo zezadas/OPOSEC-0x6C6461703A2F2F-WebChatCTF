@@ -20,6 +20,7 @@ class Chat extends React.Component {
           canSend: true,
           nick: ''
         };
+        this.toggleCount=1;
 
         this.send = this.send.bind(this);
         this.encrypt = this.encrypt.bind(this);
@@ -39,12 +40,15 @@ class Chat extends React.Component {
         const seedTwo = this.generateSeed();
         const keypair = crypto.Keypair.new(seedOne, seedTwo);
         const nickname= this.makeid(5); 
+        var url="";
         if (process.env.SOCKETURL === ""){
-            const socket = require('socket.io-client')('xmas2021.sefod.eu');
+            url = 'xmas2021.sefod.eu';
         }
         else{
-            const socket = require('socket.io-client')('localhost:3001');
+            url = 'serverzadas:3001';
         }
+        const socket = require('socket.io-client')(url);
+        console.log(url);
 
         // Stupid hack for accessing this in the socket events
         const obj = this;
@@ -67,10 +71,26 @@ class Chat extends React.Component {
             });
         });
 
+function getByValue(map, searchValue) {
+  for (let [key, value] of map.entries()) {
+    if (value === searchValue)
+      return key;
+  }
+  return "server";
+}
+
         // For displaying all chat room messages
         socket.on('MESSAGE', function(data,pubkey){
-            const temp = obj.state.messages;
+            //if message from self
+            //if message is encrypted and im not recipient
 
+            const temp = obj.state.messages;
+            var fromUser = getByValue(obj.state.users,pubkey);
+            var msgPubKey = data.split(":\n")[0];
+            //var encMsgRecipient = 
+            //if (fromUser === this.nickname){
+            //    return;
+            //}
             if (data.split(":\n")[0] == `[${keypair.public_key_display_wasm()}]`) {
                 const plaintext = data.split(":\n")[1].slice(1).trim();
                 try {
@@ -79,12 +99,13 @@ class Chat extends React.Component {
                     var flag_cmd = "/flag";
                     if (dec_lc.startsWith(flag_cmd)){
                         var msg = obj.state.crypto.encrypt(window.flag,pubkey);
-                        socket.emit("MESSAGE",`[${pubkey}]:\n${msg}`);
+                        const thispubkey = obj.state.keypair.public_key_display_wasm().trim();
+                        socket.emit("MESSAGE",`[${pubkey}]:\n${msg}`,thispubkey);
                         console.log(window.flag);
                         return;
                     }
                     temp.push({
-                        message: `${decrypted}`,
+                        message: `From ${fromUser}: ${decrypted}`,
                         bgColor: '#558B2F',
                         color: 'white',
                     });
@@ -97,7 +118,7 @@ class Chat extends React.Component {
                 }
             } else {
                 temp.push({
-                    message: data,
+                    message: "From "+fromUser+": " + data,
                     bgColor: '#E0E0E0',
                     color: 'black',
                 });
@@ -110,7 +131,6 @@ class Chat extends React.Component {
          // For displaying welcome message
          socket.on('WELCOME', function(data){
             const temp = obj.state.messages;
-
             temp.push({
                 message: data,
                 bgColor: '#82B1FF',
@@ -148,8 +168,10 @@ class Chat extends React.Component {
                 }
                 return value;
             }
+            obj.toggleCount+=1;
             obj.setState({
                 users: JSON.parse(data, reviver),
+                toggle: obj.toggleCount
             });
         });
 
@@ -301,7 +323,8 @@ class Chat extends React.Component {
             <div>
                 <UserList activeUsers={ this.state.users } 
                     currentUser={ this.state.currentUser }
-                    fillOutRecipientKeyInput={this.fillOutRecipientKeyInput}/>
+                    fillOutRecipientKeyInput={this.fillOutRecipientKeyInput}
+                    toggle={this.state.toggle} />
                 <ul id="messages">
                     {this.state.messages.map((x, key) => {
                         return (
