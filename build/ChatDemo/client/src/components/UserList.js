@@ -6,24 +6,19 @@ class UserList extends React.Component {
 
     constructor(props) {
         super(props);
+        this.togglezadas = 0;
         this.state = {
             currentUser: props.currentUser,
             activeUsers: props.activeUsers,
+            toggle: props.toggle
         };
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.activeUsers != null &&
-            (
-                prevProps.activeUsers == null || 
-                prevProps.activeUsers.length !== this.props.activeUsers.length)
-            ) {
-                this.setState({ activeUsers: this.props.activeUsers })
+        if (this.props.toggle > this.togglezadas){
+            this.togglezadas=this.props.toggle;
+            this.setState({ activeUsers: this.props.activeUsers});
         }
-        if (this.props.currentUser != prevProps.currentUser) {
-            this.setState({ currentUser: this.props.currentUser })
-        }
-        
     }
 
     render() {
