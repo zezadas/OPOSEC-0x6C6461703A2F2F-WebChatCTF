@@ -56,7 +56,11 @@ io.on('connection', function(socket){
 
   // For displaying and broadcasting all chat messages
   socket.on('MESSAGE', function(data,pubKey){
-    //if pubkey != "" and == socket.pubkey
+    if(pubKey.trim()!=socket.pubkey){
+        socket.emit("MESSAGE","nope");
+        return;
+    }
+      //if pubkey != "" and == socket.pubkey
     console.log(data);
     io.emit('MESSAGE', data,pubKey);
   });
