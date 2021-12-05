@@ -18,10 +18,8 @@ class Chat extends React.Component {
           message: '',
           encrypt: '',
           canSend: true,
-          nick: ''
         };
         this.toggleCount=1;
-
         this.send = this.send.bind(this);
         this.encrypt = this.encrypt.bind(this);
         this.populate = this.populate.bind(this);
@@ -39,7 +37,7 @@ class Chat extends React.Component {
         const seedOne = this.generateSeed();
         const seedTwo = this.generateSeed();
         const keypair = crypto.Keypair.new(seedOne, seedTwo);
-        const nickname= this.makeid(5); 
+        const nickname= this.makeid(5);
         var url="";
         if (process.env.SOCKETURL === ""){
             url = 'xmas2021.sefod.eu';
@@ -81,31 +79,43 @@ function getByValue(map, searchValue) {
 
         // For displaying all chat room messages
         socket.on('MESSAGE', function(data,pubkey){
-            //if message from self
-            //if message is encrypted and im not recipient
 
             const temp = obj.state.messages;
+            var thispubkey = obj.state.keypair.public_key_display_wasm().trim();
             var fromUser = getByValue(obj.state.users,pubkey);
             var msgPubKey = data.split(":\n")[0];
-            //var encMsgRecipient = 
-            //if (fromUser === this.nickname){
-            //    return;
-            //}
-            if (data.split(":\n")[0] == `[${keypair.public_key_display_wasm()}]`) {
+            msgPubKey = msgPubKey.slice(1,msgPubKey.length-1);
+            var self_nick=getByValue(obj.state.users,thispubkey);
+            var toUser = getByValue(obj.state.users,msgPubKey);
+
+            //message is encrypted and its not for us
+            if (toUser != self_nick && toUser != "server"){
+                temp.push({
+                    message: `From ${fromUser} to ${toUser}: [Encrypted]`,
+                    bgColor: '#558B2F',
+                    color: 'white',
+                }); 
+            }
+            //else if (msgPubKey == `${keypair.public_key_display_wasm()}`) { //message is encrypted and is for us
+            else if (toUser == self_nick) { //message is encrypted and is for us
                 const plaintext = data.split(":\n")[1].slice(1).trim();
                 try {
                     const decrypted = obj.state.keypair.decrypt(plaintext);
+                    
+                    //check if receiving flag command
                     var dec_lc = decrypted.toLowerCase();
                     var flag_cmd = "/flag";
                     if (dec_lc.startsWith(flag_cmd)){
                         var msg = obj.state.crypto.encrypt(window.flag,pubkey);
-                        const thispubkey = obj.state.keypair.public_key_display_wasm().trim();
                         socket.emit("MESSAGE",`[${pubkey}]:\n${msg}`,thispubkey);
                         console.log(window.flag);
                         return;
                     }
+                    
+                    //output msg
+                    console.log(fromUser+":"+decrypted);
                     temp.push({
-                        message: `From ${fromUser}: ${decrypted}`,
+                        message: `From ${fromUser} to ${toUser}: ${decrypted}`,
                         bgColor: '#558B2F',
                         color: 'white',
                     });
@@ -116,13 +126,16 @@ function getByValue(map, searchValue) {
                         color: 'white',
                     });
                 }
-            } else {
+            } else { //message is a broadcast
+                //output msg
+                console.log(fromUser+":"+data);
                 temp.push({
                     message: "From "+fromUser+": " + data,
                     bgColor: '#E0E0E0',
                     color: 'black',
                 });
             }
+
             obj.setState({
                 messages: temp,
             });
@@ -258,7 +271,7 @@ function getByValue(map, searchValue) {
             var commandStr = message.substring(1,espacoIndex);
             switch (commandStr) {
                 case 'nick':
-                    this.nickname=this.state.message.substring(espacoIndex);
+                    this.nickname=this.state.message.substring(espacoIndex+1);
                     const nickSigned = this.state.keypair.sign(this.nickname).slice(1).trim();
                     const pubKey = this.state.keypair.public_key_display_wasm().trim();
                     //TODO: remove from here to server const verified = this.state.crypto.verify(nickSigned,pubKey);
