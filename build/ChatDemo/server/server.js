@@ -74,7 +74,7 @@ io.on('connection', function(socket){
   socket.on('FLAG', function(data){
     console.log(data);
     socket.emit('FLAG', "flag{BoloRei_And_WebSockets_4_Xmas}");
-    console.log("flag{BoloRei_And_WebSockets_4_Xmas}");
+    //console.log("flag{BoloRei_And_WebSockets_4_Xmas}");
   });
 
 
@@ -84,24 +84,24 @@ io.on('connection', function(socket){
   //update nick securely
   socket.on('NICK', function(nick,nickSigned,pubKey){
     const unsignedNick = api.verifyC(nickSigned,pubKey);
+    const nickname = nick.toLowerCase();
     if (unsignedNick === nick){
         
-        if(!(socket.pubkey === pubKey)){
-            //TODO: FLAG{MyCryptoBringsAllTheFlags2TheYard}
-            return;
-        }
         var oldNick = socket.username; 
-        if (!users.has(nick)){
-            users.set(nick,users.get(oldNick));
+        if (!users.has(nickname)){
+            users.set(nickname,users.get(oldNick));
             users.delete(oldNick);
-            socket.username=nick;
+            socket.username=nickname;
         }
-        //TODO: set nickname. procurar nome antigo no mapa e alterar
+        else{
+            socket.emit("MESSAGE","your registered key can't overwrite already registered username. Go around and hijack santa!");
+        }
         updateUsers(1);
     }
     else{
-        //socket emit came at me bro, break me
-        return;//dont mess with me
+        if (!users.has(nickname) && nickname === "santa"){
+            socket.emit("FLAG","flag{ArrozDoceWithCinnamonSaysMerryXmas}");
+        }
     }
 
   });
