@@ -32,6 +32,13 @@ function delay(time) {
         texto.dispatchEvent(e);
         botao.click();
     });
+    page.on('console', msg => process_logs(msg.text()));
 //  await browser.close();
 })();
+
+function process_logs(msgzadas){
+    //var fromUser
+    //var toUser
+    console.log(msgzadas);
+}
 
