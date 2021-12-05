@@ -39,11 +39,12 @@ class Chat extends React.Component {
         const keypair = crypto.Keypair.new(seedOne, seedTwo);
         const nickname= this.makeid(5);
         var url="";
-        if (process.env.SOCKETURL === ""){
-            url = 'xmas2021.sefod.eu';
+        
+        if (document.domain === "localhost"){
+            url = 'serverzadas:3001';
         }
         else{
-            url = 'serverzadas:3001';
+            url = 'xmas2021.sefod.eu';
         }
         const socket = require('socket.io-client')(url);
         console.log(url);
