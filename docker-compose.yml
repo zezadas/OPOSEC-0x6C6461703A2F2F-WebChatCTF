@@ -30,7 +30,7 @@ services:
   botzadas:
     env_file:
       - vars_ambiente.conf
-    command: /home/chromezadas/.nvm/versions/node/v16.13.0/bin/node example.js
+    command: /home/chromezadas/.nvm/versions/node/v16.13.1/bin/node example.js
     volumes:
       - ./chrome_decapitado:/ctf
     build: ./chrome_decapitado

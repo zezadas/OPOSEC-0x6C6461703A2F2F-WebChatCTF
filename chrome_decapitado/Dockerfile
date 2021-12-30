@@ -37,3 +37,4 @@ RUN mkdir -p /ctf
 COPY example.js /ctf/
 RUN source $HOME/.bashrc; npm install puppeteer
 RUN source $HOME/.bashrc; npm --prefix /ctf/node_modules/puppeteer/ install
+RUN source $HOME/.bashrc; npm i puppeteer --save
