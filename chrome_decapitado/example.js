@@ -11,11 +11,11 @@ function delay(time) {
     const page = await browser.newPage();
     await delay(5000);
     var url="";
-    if (process.env.SOCKETURL === ""){
-            url = 'http://xmas2021.sefod.eu';
+    if (process.env.ISDEBUG === "true"){
+            url = 'http://clientzadas:8080';
     }
     else{
-            url = 'http://clientzadas:8080';
+            url = 'http://xmas2021.sefod.eu';
     }
     console.log(url);
     await page.goto(url);
