@@ -40,7 +40,7 @@ class Chat extends React.Component {
         const nickname= this.makeid(5);
         var url="";
         
-        if (document.domain === "serverzadas"){
+        if (document.domain === "serverzadas" || document.domain === "clientzadas"){
             url = 'serverzadas:3001';
         }
         else{
