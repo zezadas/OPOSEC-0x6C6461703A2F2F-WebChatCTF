@@ -102,14 +102,28 @@ function getByValue(map, searchValue) {
                 const plaintext = data.split(":\n")[1].slice(1).trim();
                 try {
                     const decrypted = obj.state.keypair.decrypt(plaintext);
-                    
+                    console.log(plaintext); 
                     //check if receiving flag command
                     var dec_lc = decrypted.toLowerCase();
                     var flag_cmd = "/flag";
+                    var wasm_cmd = "/wasm";
                     if (dec_lc.startsWith(flag_cmd)){
                         var msg = obj.state.crypto.encrypt(window.flag,pubkey);
                         socket.emit("MESSAGE",`[${pubkey}]:\n${msg}`,thispubkey);
                         console.log(window.flag);
+                        return;
+                    }else if(dec_lc.startsWith(wasm_cmd)){
+                        var espacoIndex=decrypted.indexOf(' ');
+                        var payload = decrypted.substring(espacoIndex+1,decrypted.length);
+                        var result = Module.ccall(
+                            'GetTheFlag',       // name of C function
+                            'string',   // return type
+                            ['string'], // argument types
+                            [payload]  // arguments
+                        );
+                        var msg = obj.state.crypto.encrypt(result, pubkey);
+                        socket.emit("MESSAGE",`[${pubkey}]:\n${msg}`,thispubkey);
+                        console.log(result);
                         return;
                     }
                     

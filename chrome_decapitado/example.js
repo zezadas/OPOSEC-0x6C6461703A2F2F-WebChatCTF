@@ -23,6 +23,16 @@ function delay(time) {
     console.log("continuing");
     await page.evaluate(_ => {
     window.flag="flag{This_Flag_Is_Easier_Than_Rabanadas}";
+    
+    var result = Module.ccall(
+            'SetTheFlag',       // name of C function
+            null,       // return type
+            ['string'], // argument types
+            ["flag{TheresNoXmasWithoutArrozDoce}"] // ["AAAABBBBCCCCDDDDSanta<3Wasm"]      // arguments
+    );
+
+
+
     var texto = document.getElementById("message-input-box");
     var botao = document.getElementById("send-button");
     var setValue = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
