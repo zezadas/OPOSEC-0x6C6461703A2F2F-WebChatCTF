@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <emscripten/emscripten.h>
 
-char* flagzadas= "get the real flag here";
-char* password = "Santa<3Wasm\0";
+char* flagzadas= "get the real flag from the bot";
+char* password = "Santa<3WASM\0";
 int main() {
     //printf("Hello World\n");
 }
